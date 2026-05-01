@@ -1,135 +1,78 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Hello, World!</title>
+    <title>Hello, World! | upior</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Hello World placeholder">
+    <meta name="description" content="First note from the upior Deadlock queue office.">
+    <meta name="theme-color" content="#10120d">
     <link rel="preload" href="/fonts/share-tech-mono-400.woff2" as="font" type="font/woff2" crossorigin>
     <style>
 @font-face {
-    font-family: 'Share Tech Mono';
-    src: url('/fonts/share-tech-mono-400.woff2') format('woff2');
+    font-family: "Share Tech Mono";
+    src: url("/fonts/share-tech-mono-400.woff2") format("woff2");
     font-style: normal;
     font-weight: 400;
     font-display: block;
 }
 
-tt {
-    font-size:14px;
+* {
+    box-sizing: border-box;
+}
+
+html {
+    background: #10120d;
+    color: #d9dcc8;
 }
 
 body {
     max-width: 650px;
-    margin: 60px auto;
-    padding: 0 10px;
-    font: 18px/1.5 -apple-system, "Share Tech Mono";
-    color: #c8c8c8;
-    background: #222;
-    letter-spacing: 0.1px;
+    margin: 54px auto;
+    padding: 0 14px 56px;
+    font: 18px/1.55 "Share Tech Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", monospace;
+    color: #d9dcc8;
+    background: #10120d;
+    letter-spacing: 0.02em;
 }
 
-p {
-    text-align: justify;
+a {
+    color: #f4ffd2;
+    text-decoration: none;
 }
 
-h1 {
-    text-align: center;
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+a:hover {
+    text-decoration: underline;
 }
 
 h1,
 h2,
-h3 {
+p {
+    margin: 0;
+}
+
+h1 {
+    margin: 3rem 0;
+    font-size: clamp(2.8rem, 10vw, 5rem);
+    line-height: 0.95;
+    text-align: center;
+}
+
+h2 {
+    margin: 0 0 18px;
+    color: #f4ffd2;
     line-height: 1.2;
-    margin-top: 50px;
 }
 
-li {
-    list-style: "> "
+p {
+    color: #aeb69d;
+    text-align: justify;
 }
 
-a {
-    text-decoration: none;
-    color: #fff;
+.panel {
+    border: 1px solid rgba(244, 255, 210, 0.15);
+    background: rgba(20, 24, 16, 0.72);
+    padding: clamp(18px, 4vw, 34px);
 }
-
-a:hover {
-    color: #fff;
-    text-decoration: none;
-}
-
-.section a {
-    text-decoration: underline;
-}
-
-pre {
-    font-family: monospace, "Courier New", Courier;
-    font-size: 14px;
-    background-color:#1f1f1f;
-    overflow: auto;
-    display: block;
-    padding: 10px;
-}
-
-code {
-    font-family: monospace
-}
-
-#h2hack h2 {
-    display: none;
-}
-
-.tag {
-    margin: 0 10px 0 0;
-    color: #c8c8c8;
-}
-
-.center {
-    display:flex;
-    justify-content:center;
-    line-height: normal;
-}
-
-.highlight .hll { background-color: #ffffcc }
-.highlight  { background: #1f1f1f; }
-.highlight .c { font-style: italic }
-.highlight .err { border: 1px solid #FF0000 }
-.highlight .k { font-weight: bold }
-.highlight .ch { font-style: italic }
-.highlight .cm { font-style: italic }
-.highlight .cpf { font-style: italic }
-.highlight .c1 { font-style: italic }
-.highlight .cs { font-style: italic }
-.highlight .ge { font-style: italic }
-.highlight .gh { font-weight: bold }
-.highlight .gp { font-weight: bold }
-.highlight .gs { font-weight: bold }
-.highlight .gu { font-weight: bold }
-.highlight .kc { font-weight: bold }
-.highlight .kd { font-weight: bold }
-.highlight .kn { font-weight: bold }
-.highlight .kr { font-weight: bold }
-.highlight .s { font-style: italic }
-.highlight .nc { font-weight: bold }
-.highlight .ni { font-weight: bold }
-.highlight .ne { font-weight: bold }
-.highlight .nn { font-weight: bold }
-.highlight .nt { font-weight: bold }
-.highlight .ow { font-weight: bold }
-.highlight .sa { font-style: italic }
-.highlight .sb { font-style: italic }
-.highlight .sc { font-style: italic }
-.highlight .dl { font-style: italic }
-.highlight .sd { font-style: italic }
-.highlight .s2 { font-style: italic }
-.highlight .se { font-weight: bold; font-style: italic }
-.highlight .sh { font-style: italic }
-.highlight .si { font-weight: bold; font-style: italic }
-.highlight .sx { font-style: italic }
-.highlight .sr { font-style: italic }
-.highlight .s1 { font-style: italic }
-.highlight .ss { font-style: italic }
 
 ::-webkit-scrollbar {
     width: 3px;
@@ -137,26 +80,20 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-    background: #222;
-    border-radius: 10px;
+    background: #10120d;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #c8c8c8;
+    background: #d9dcc8;
     border-radius: 10px;
-    border: 1px solid;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
 }
     </style>
-    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfoBhISHy5NvS20AAABjUlEQVRIx8WUu0oDURCGv3XNhgQSmwgGVCwEUUy8FYIgiIWdELEVFCzEywP4BBaWllZWotiIXZpAQEFsbCLaRsUmFoZcjLkdi2VN1uzlbKMz3c78H3POf3bgv0OV6PCj0rQrKw5ShVGWmSFClSw3pHj1MpvGNlnET9bJsEVQHrBDsU2uZ4VDAnLyaZ475ALBJxsycoUjS7lAkCbsDhjgyRaQY6K9tcsSEGPIFh6izx0wjt8WoJpr1oBhh+M1+HID9DDmAKhRcAaorDDlAKiYAd2mop851kg4vrcmDbvSCCfkbe0zssSitXyWe1exnsdWHkW5lpQLyuyj/Qbs0pQGCErsmReBypkHuUDwYjil2+gjgrfoJ9EOqJHzCIBJfC1AgyR1j4Cgvk+Nl3jJlUfAG1Xzh0FOqUhfYo114/6NyJPkARUfdUoUqaHZ/KsAaQ4oQ+da1+glDAiCxFhlgZCFPMMmdzLnDLDEOe+m4QtcEG+1KK4QPzHmiRPFxwePpLjVh5cFGH0aCnXPZv9BfAPRv/as4AFBSAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNC0wNi0xOFQxODozMTo0NiswMDowMG/irgkAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjQtMDYtMThUMTg6MzE6NDYrMDA6MDAevxa1AAAAV3pUWHRSYXcgcHJvZmlsZSB0eXBlIGlwdGMAAHic4/IMCHFWKCjKT8vMSeVSAAMjCy5jCxMjE0uTFAMTIESANMNkAyOzVCDL2NTIxMzEHMQHy4BIoEouAOoXEXTyQjWVAAAAAElFTkSuQmCC">
   </head>
   <body>
     <h1><a href="./index.html">upior</a></h1>
-    <h2>Hello, World!</h2>
-    <p>Placeholder.</p>
-
+    <main class="panel">
+      <h2>Hello, World!</h2>
+      <p>First dispatch from the Deadlock queue office. Intake stays quiet, routes stay measured, and the public story stays boring.</p>
+    </main>
   </body>
- </html>
+</html>
