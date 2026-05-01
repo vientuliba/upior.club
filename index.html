@@ -129,6 +129,27 @@ h2 {
     font-size: 0.92rem;
 }
 
+.stream {
+    margin-top: 44px;
+}
+
+.stream-frame {
+    position: relative;
+    width: min(100%, 680px);
+    margin: 18px auto 0;
+    aspect-ratio: 16 / 9;
+    border: 1px solid rgba(244, 255, 210, 0.15);
+    background: #080a07;
+}
+
+.stream-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
 .rates {
     padding: 0;
     margin: 16px 0 0;
@@ -232,6 +253,18 @@ h2 {
             <h3>Reputation Polish</h3>
             <p>Post-match summaries, VOD captions, and rank-up explanations for clients who need the story to hold together.</p>
           </article>
+        </div>
+      </section>
+
+      <section class="stream" aria-labelledby="stream-title">
+        <h2 id="stream-title">Live desk feed</h2>
+        <div class="stream-frame">
+          <iframe
+            src="https://player.twitch.tv/?channel=thuhbiga&amp;parent=upior.club&amp;parent=www.upior.club"
+            title="thuhbiga Twitch stream"
+            allowfullscreen
+            loading="lazy">
+          </iframe>
         </div>
       </section>
 
