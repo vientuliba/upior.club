@@ -1,293 +1,137 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>upior | Deadlock Queue Office</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Private Deadlock wintrading and queue management services.">
-    <meta name="theme-color" content="#10120d">
-    <link rel="preload" href="/fonts/share-tech-mono-400.woff2" as="font" type="font/woff2" crossorigin>
+    <meta name="description" content="authand on GitHub.">
+    <meta name="theme-color" content="#dfc0c3">
+    <meta name="color-scheme" content="light">
+    <title>authand</title>
     <style>
-@font-face {
-    font-family: "Share Tech Mono";
-    src: url("/fonts/share-tech-mono-400.woff2") format("woff2");
-    font-style: normal;
-    font-weight: 400;
-    font-display: block;
-}
+      :root {
+        --pink: #dfc0c3;
+        --white: #f8f5ee;
+        --ink: #171213;
+        --line: rgba(23, 18, 19, 0.11);
+      }
 
-* {
-    box-sizing: border-box;
-}
+      * {
+        box-sizing: border-box;
+      }
 
-html {
-    background: #10120d;
-    color: #d9dcc8;
-}
+      html {
+        min-height: 100%;
+        background: var(--pink);
+      }
 
-body {
-    max-width: 760px;
-    margin: 54px auto;
-    padding: 0 14px 56px;
-    font: 18px/1.55 "Share Tech Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", monospace;
-    color: #d9dcc8;
-    background:
-        radial-gradient(circle at 18% 0%, rgba(190, 255, 98, 0.11), transparent 30%),
-        radial-gradient(circle at 88% 16%, rgba(109, 177, 255, 0.09), transparent 28%),
-        #10120d;
-    letter-spacing: 0.02em;
-}
+      body {
+        --cell: 46px;
+        --band: calc(var(--cell) * 2);
 
-a {
-    color: #f4ffd2;
-    text-decoration: none;
-}
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        color: var(--ink);
+        font: 500 16px/1 ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        background:
+          linear-gradient(var(--line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--line) 1px, transparent 1px),
+          linear-gradient(
+            to bottom,
+            transparent 0 calc(50% - var(--band) / 2),
+            var(--white) 0 calc(50% + var(--band) / 2),
+            transparent 0
+          ),
+          linear-gradient(
+            to right,
+            var(--pink) 0 calc(50% - var(--band) / 2),
+            var(--white) 0 calc(50% + var(--band) / 2),
+            var(--pink) 0
+          );
+        background-position:
+          calc(50% + var(--cell) / 2) calc(50% + var(--cell) / 2),
+          calc(50% + var(--cell) / 2) calc(50% + var(--cell) / 2),
+          0 0,
+          0 0;
+        background-size:
+          var(--cell) var(--cell),
+          var(--cell) var(--cell),
+          100% 100%,
+          100% 100%;
+      }
 
-a:hover {
-    text-decoration: underline;
-}
+      main {
+        position: relative;
+        z-index: 1;
+        padding: 24px;
+      }
 
-h1,
-h2,
-h3,
-p {
-    margin: 0;
-}
+      a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        color: var(--ink);
+        text-decoration: none;
+        letter-spacing: 0;
+        text-transform: lowercase;
+        filter: drop-shadow(0 1px 0 rgba(248, 245, 238, 0.38));
+      }
 
-h1 {
-    margin: 0 0 18px;
-    color: #f4ffd2;
-    font-size: clamp(3rem, 13vw, 7rem);
-    line-height: 0.9;
-    letter-spacing: -0.08em;
-    text-align: center;
-}
+      a::before,
+      a::after {
+        color: rgba(23, 18, 19, 0.54);
+        transition: transform 150ms ease, color 150ms ease;
+      }
 
-h2 {
-    margin: 44px 0 14px;
-    color: #f4ffd2;
-    font-size: 1.22rem;
-    line-height: 1.2;
-}
+      a::before {
+        content: "[";
+        margin-right: 0.38em;
+      }
 
-.kicker,
-.subline,
-.fineprint,
-.tag {
-    color: #9aa087;
-}
+      a::after {
+        content: "]";
+        margin-left: 0.38em;
+      }
 
-.kicker {
-    margin-bottom: 34px;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    font-size: 0.8rem;
-}
+      a:hover,
+      a:focus-visible {
+        color: #000;
+      }
 
-.panel {
-    border: 1px solid rgba(244, 255, 210, 0.15);
-    background: rgba(20, 24, 16, 0.72);
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
-    padding: clamp(18px, 4vw, 34px);
-}
+      a:hover::before,
+      a:focus-visible::before {
+        color: #000;
+        transform: translateX(-3px);
+      }
 
-.lead {
-    color: #e7ebd5;
-    font-size: clamp(1.05rem, 2.6vw, 1.35rem);
-}
+      a:hover::after,
+      a:focus-visible::after {
+        color: #000;
+        transform: translateX(3px);
+      }
 
-.notice {
-    margin-top: 18px;
-    padding-left: 14px;
-    border-left: 2px solid #baff63;
-    color: #aeb69d;
-}
+      a:focus-visible {
+        outline: 1px solid currentColor;
+        outline-offset: 7px;
+      }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-top: 18px;
-}
+      ::selection {
+        color: var(--white);
+        background: var(--ink);
+      }
 
-.card {
-    min-height: 150px;
-    border: 1px solid rgba(244, 255, 210, 0.12);
-    background: rgba(255, 255, 255, 0.025);
-    padding: 16px;
-}
-
-.card h3 {
-    margin-bottom: 10px;
-    color: #f4ffd2;
-    font-size: 1rem;
-}
-
-.card p,
-.fineprint {
-    font-size: 0.92rem;
-}
-
-.stream {
-    margin-top: 44px;
-}
-
-.stream-frame {
-    position: relative;
-    width: min(100%, 680px);
-    margin: 18px auto 0;
-    aspect-ratio: 16 / 9;
-    border: 1px solid rgba(244, 255, 210, 0.15);
-    background: #080a07;
-}
-
-.stream-frame iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-}
-
-.rates {
-    padding: 0;
-    margin: 16px 0 0;
-}
-
-.rates li {
-    display: flex;
-    justify-content: space-between;
-    gap: 18px;
-    padding: 11px 0;
-    border-bottom: 1px solid rgba(244, 255, 210, 0.11);
-    list-style: none;
-}
-
-.rates li::before {
-    content: ">";
-    color: #baff63;
-}
-
-.status {
-    color: #f4ffd2;
-    text-align: right;
-}
-
-.posts {
-    padding: 0;
-    margin: 18px 0 0;
-}
-
-.posts li {
-    list-style: "> ";
-}
-
-.tag {
-    margin-right: 10px;
-}
-
-::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
-}
-
-::-webkit-scrollbar-track {
-    background: #10120d;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #d9dcc8;
-    border-radius: 10px;
-}
-
-@media (max-width: 720px) {
-    body {
-        margin-top: 32px;
-        font-size: 16px;
-    }
-
-    .grid {
-        grid-template-columns: 1fr;
-    }
-
-    .rates li {
-        display: block;
-    }
-
-    .status {
-        margin-top: 4px;
-        text-align: left;
-    }
-}
+      @media (max-width: 520px) {
+        body {
+          --cell: 34px;
+        }
+      }
     </style>
   </head>
   <body>
-    <header>
-      <h1>upior</h1>
-      <p class="kicker">deadlock wintrading services</p>
-    </header>
-
-    <main class="panel">
-      <p class="lead">
-        Quiet match-shaping for Deadlock players who want their climb to read like destiny, not desperation.
-        We write the alibi, the tempo, and the post-game story so every suspicious streak still looks earned.
-      </p>
-
-      <p class="notice">
-        Private intake, quiet scheduling, and clean delivery notes for clients who need the ladder to look ordinary.
-      </p>
-
-      <section aria-labelledby="services-title">
-        <h2 id="services-title">What the office handles</h2>
-        <div class="grid">
-          <article class="card">
-            <h3>Outcome Theater</h3>
-            <p>Believable win-loss arcs drafted around your hero pool, play hours, and the kind of streak that survives a profile check.</p>
-          </article>
-          <article class="card">
-            <h3>Queue Cover</h3>
-            <p>Coordination notes, comms scripts, and lobby pacing designed to sound natural instead of engineered.</p>
-          </article>
-          <article class="card">
-            <h3>Reputation Polish</h3>
-            <p>Post-match summaries, VOD captions, and rank-up explanations for clients who need the story to hold together.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="stream" aria-labelledby="stream-title">
-        <h2 id="stream-title">Live desk feed</h2>
-        <div class="stream-frame">
-          <iframe
-            src="https://player.twitch.tv/?channel=ilaifi&amp;parent=upior.club&amp;parent=www.upior.club"
-            title="ilaifi Twitch stream"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
-        </div>
-      </section>
-
-      <section aria-labelledby="rates-title">
-        <h2 id="rates-title">Desk board</h2>
-        <ul class="rates">
-          <li><span>Latest customer</span><span class="status">laifi</span></li>
-          <li><span>Referral payout</span><span class="status">200 upior credits per referral</span></li>
-          <li><span>Quiet Queue retainer</span><span class="status">closed</span></li>
-          <li><span>Ascendant weekend route</span><span class="status">waitlist</span></li>
-          <li><span>Patron cover package</span><span class="status">invite only</span></li>
-        </ul>
-      </section>
-
-      <section aria-labelledby="notes-title">
-        <h2 id="notes-title">Notes</h2>
-        <p class="fineprint">
-          We keep the public story boring: steady sessions, modest streaks, and no loud claims. Good work should look like nothing happened.
-        </p>
-        <ul class="posts">
-          <li><a href="/hello-world.html"><span class="tag">[000000]</span>Hello, World!</a></li>
-        </ul>
-      </section>
+    <main>
+      <a href="https://github.com/authand" rel="me">github.com/authand</a>
     </main>
   </body>
 </html>
