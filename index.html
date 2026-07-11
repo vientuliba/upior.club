@@ -4,15 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="authand on GitHub.">
-    <meta name="theme-color" content="#dfc0c3">
+    <meta name="theme-color" content="#050505">
     <meta name="color-scheme" content="light">
     <title>authand</title>
     <style>
       :root {
-        --pink: #dfc0c3;
-        --white: #f8f5ee;
-        --ink: #171213;
-        --line: rgba(23, 18, 19, 0.11);
+        --black: #050505;
+        --white: #ffffff;
+        --ink: #050505;
+        --line: rgba(255, 255, 255, 0.16);
       }
 
       * {
@@ -21,7 +21,7 @@
 
       html {
         min-height: 100%;
-        background: var(--pink);
+        background: var(--black);
       }
 
       body {
@@ -44,9 +44,9 @@
           ),
           linear-gradient(
             to right,
-            var(--pink) 0 calc(50% - var(--band) / 2),
+            var(--black) 0 calc(50% - var(--band) / 2),
             var(--white) 0 calc(50% + var(--band) / 2),
-            var(--pink) 0
+            var(--black) 0
           );
         background-position:
           calc(50% + var(--cell) / 2) calc(50% + var(--cell) / 2),
@@ -77,12 +77,12 @@
         text-decoration: none;
         letter-spacing: 0;
         text-transform: lowercase;
-        filter: drop-shadow(0 1px 0 rgba(248, 245, 238, 0.38));
+        filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.5));
       }
 
       a::before,
       a::after {
-        color: rgba(23, 18, 19, 0.54);
+        color: rgba(5, 5, 5, 0.62);
         transition: transform 150ms ease, color 150ms ease;
       }
 
