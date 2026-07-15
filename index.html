@@ -3,16 +3,27 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="authand on GitHub.">
-    <meta name="theme-color" content="#050505">
+    <meta name="description" content="slimiba.">
+    <meta name="theme-color" content="#f6f4ee">
     <meta name="color-scheme" content="light">
-    <title>authand</title>
+    <link rel="preload" href="share-tech-mono.woff2" as="font" type="font/woff2" crossorigin>
+    <title>slimiba</title>
     <style>
+      @font-face {
+        font-family: "Share Tech Mono";
+        src: url("share-tech-mono.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
       :root {
-        --black: #050505;
-        --white: #ffffff;
-        --ink: #050505;
-        --line: rgba(255, 255, 255, 0.16);
+        --paper: #f6f4ee;
+        --paper-deep: #ebe8df;
+        --ink: #19181d;
+        --ink-soft: #302c35;
+        --violet: #433557;
+        --violet-soft: #d7d0dc;
       }
 
       * {
@@ -21,118 +32,161 @@
 
       html {
         min-height: 100%;
-        background: var(--black);
+        background: var(--paper);
       }
 
       body {
-        --cell: 46px;
-        --band: calc(var(--cell) * 2);
-
         min-height: 100vh;
+        min-height: 100svh;
         margin: 0;
-        overflow: hidden;
         color: var(--ink);
-        font: 500 16px/1 ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        font: 400 16px/1.5 "Share Tech Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
         background:
-          linear-gradient(var(--line) 1px, transparent 1px),
-          linear-gradient(90deg, var(--line) 1px, transparent 1px),
-          linear-gradient(
-            to bottom,
-            transparent 0 calc(50% - var(--band) / 2),
-            var(--white) 0 calc(50% + var(--band) / 2),
-            transparent 0
-          ),
-          linear-gradient(
-            to right,
-            var(--black) 0 calc(50% - var(--band) / 2),
-            var(--white) 0 calc(50% + var(--band) / 2),
-            var(--black) 0
-          );
-        background-position:
-          calc(50% + var(--cell) / 2) calc(50% + var(--cell) / 2),
-          calc(50% + var(--cell) / 2) calc(50% + var(--cell) / 2),
-          0 0,
-          0 0;
-        background-size:
-          var(--cell) var(--cell),
-          var(--cell) var(--cell),
-          100% 100%,
-          100% 100%;
+          linear-gradient(135deg, rgba(67, 53, 87, 0.11), transparent 40%),
+          linear-gradient(315deg, rgba(25, 24, 29, 0.055), transparent 36%),
+          var(--paper);
       }
 
       main {
-        position: fixed;
-        inset: 0;
+        position: relative;
         z-index: 1;
+        min-height: 100vh;
+        min-height: 100svh;
         display: grid;
         place-items: center;
-        padding: 24px;
+        padding: 32px;
+      }
+
+      .profile {
+        width: min(100%, 430px);
+        display: grid;
+        gap: 24px;
+        justify-items: start;
+      }
+
+      .avatar {
+        width: 112px;
+        height: 148px;
+        display: block;
+        overflow: hidden;
+        border: 1px solid rgba(25, 24, 29, 0.18);
+        border-radius: 6px;
+        background: var(--paper-deep);
+      }
+
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: 50% 48%;
+      }
+
+      .copy {
+        display: grid;
+        gap: 10px;
+      }
+
+      h1 {
+        margin: 0;
+        color: var(--ink);
+        font-size: 72px;
+        font-weight: 400;
+        line-height: 0.92;
+        letter-spacing: 0;
       }
 
       a {
+        width: fit-content;
+        min-height: 44px;
         display: inline-flex;
         align-items: center;
-        min-height: 44px;
-        color: var(--ink);
+        font-size: 15px;
+        color: var(--violet);
+        font-weight: 400;
         text-decoration: none;
-        letter-spacing: 0;
-        text-transform: lowercase;
-        filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.5));
+        transition:
+          color 160ms ease,
+          transform 160ms ease;
       }
 
       a::before,
       a::after {
-        color: rgba(5, 5, 5, 0.62);
-        transition: transform 150ms ease, color 150ms ease;
+        color: rgba(67, 53, 87, 0.5);
+        transition:
+          color 160ms ease,
+          transform 160ms ease;
       }
 
       a::before {
         content: "[";
-        margin-right: 0.38em;
+        margin-right: 0.42em;
       }
 
       a::after {
         content: "]";
-        margin-left: 0.38em;
+        margin-left: 0.42em;
       }
 
       a:hover,
       a:focus-visible {
-        color: #000;
+        color: var(--ink-soft);
+        transform: translateY(-1px);
       }
 
       a:hover::before,
       a:focus-visible::before {
-        color: #000;
-        transform: translateX(-3px);
+        color: var(--ink-soft);
+        transform: translateX(-2px);
       }
 
       a:hover::after,
       a:focus-visible::after {
-        color: #000;
-        transform: translateX(3px);
+        color: var(--ink-soft);
+        transform: translateX(2px);
       }
 
       a:focus-visible {
-        outline: 1px solid currentColor;
-        outline-offset: 7px;
+        outline: 2px solid var(--violet-soft);
+        outline-offset: 6px;
       }
 
       ::selection {
-        color: var(--white);
-        background: var(--ink);
+        color: var(--paper);
+        background: var(--violet);
       }
 
-      @media (max-width: 520px) {
-        body {
-          --cell: 34px;
+      @media (max-width: 620px) {
+        main {
+          padding: 24px;
+        }
+
+        .profile {
+          gap: 20px;
+        }
+
+        .avatar {
+          width: 86px;
+          height: 114px;
+        }
+
+        h1 {
+          font-size: 48px;
         }
       }
     </style>
   </head>
   <body>
     <main>
-      <a href="https://github.com/authand" rel="me">github.com/authand</a>
+      <section class="profile" aria-label="slimiba">
+        <picture class="avatar">
+          <img src="profile.jpg" width="112" height="148" alt="">
+        </picture>
+        <div class="copy">
+          <h1>slimiba</h1>
+          <a href="https://github.com/vientuliba" rel="me">github.com/vientuliba</a>
+        </div>
+      </section>
     </main>
   </body>
 </html>
