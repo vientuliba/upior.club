@@ -1,43 +1,140 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Deploy to VPS
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
+    paths-ignore:
+      - ".github/**"
+      - "deploy/**"
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: upior-club-production
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    name: Deploy production site
     runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://upior.club
+
     steps:
-      - name: Checkout
+      - name: Check out the site
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          set -Eeuo pipefail
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+          ssh-keygen -y -f ~/.ssh/id_ed25519 > /dev/null
+
+      - name: Package site
+        run: |
+          set -Eeuo pipefail
+          tar \
+            --exclude-vcs \
+            --exclude='./.github' \
+            --exclude='./deploy' \
+            --exclude='./.gitignore' \
+            --exclude='./README*' \
+            -czf /tmp/upior-site.tar.gz .
+
+      - name: Upload and activate release
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          set -Eeuo pipefail
+          release_id="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${GITHUB_SHA}"
+          remote_archive="/tmp/upior-${release_id}.tar.gz"
+          ssh_options=(-i ~/.ssh/id_ed25519 -o BatchMode=yes -o IdentitiesOnly=yes -o ConnectTimeout=15)
+
+          scp "${ssh_options[@]}" -P "$VPS_PORT" \
+            /tmp/upior-site.tar.gz \
+            "${VPS_USER}@${VPS_HOST}:${remote_archive}"
+
+          ssh "${ssh_options[@]}" -p "$VPS_PORT" \
+            "${VPS_USER}@${VPS_HOST}" \
+            "bash -s -- '$release_id' '$remote_archive'" <<'REMOTE'
+          set -Eeuo pipefail
+
+          release_id="$1"
+          archive="$2"
+
+          case "$release_id" in
+            *[!0-9a-f-]*|'')
+              printf 'Invalid release ID\n' >&2
+              exit 1
+              ;;
+          esac
+
+          case "$archive" in
+            /tmp/upior-*.tar.gz) ;;
+            *)
+              printf 'Invalid archive path\n' >&2
+              exit 1
+              ;;
+          esac
+
+          site_root=/var/www/upior.club
+          releases_dir="$site_root/releases"
+          release="$releases_dir/$release_id"
+          staging="$releases_dir/.${release_id}.tmp"
+          next_link="$site_root/.current-${release_id}"
+          rollback_link="$site_root/.rollback-${release_id}"
+          previous=$(readlink -f "$site_root/current" 2>/dev/null || true)
+
+          cleanup() {
+            rm -rf -- "$staging"
+            rm -f -- "$archive" "$next_link" "$rollback_link"
+          }
+          trap cleanup EXIT
+
+          install -d -m 755 "$releases_dir"
+          test ! -e "$release"
+          install -d -m 755 "$staging"
+          tar -xzf "$archive" -C "$staging"
+          test -s "$staging/index.html"
+
+          mv -- "$staging" "$release"
+          ln -s "$release" "$next_link"
+          mv -Tf -- "$next_link" "$site_root/current"
+
+          if ! curl -fsS --retry 3 --retry-delay 1 \
+            -H 'Host: upior.club' http://127.0.0.1/ > /dev/null; then
+            if [ -n "$previous" ] && [ -d "$previous" ]; then
+              ln -s "$previous" "$rollback_link"
+              mv -Tf -- "$rollback_link" "$site_root/current"
+            fi
+            printf 'Local health check failed; restored previous release\n' >&2
+            exit 1
+          fi
+
+          find "$releases_dir" \
+            -mindepth 1 -maxdepth 1 -type d ! -name '.*' \
+            -printf '%T@ %p\n' \
+            | sort -nr \
+            | tail -n +6 \
+            | cut -d' ' -f2- \
+            | while IFS= read -r old_release; do
+                rm -rf -- "$old_release"
+              done
+
+          printf 'Activated release %s\n' "$release_id"
+          REMOTE
+
+      - name: Verify public site
+        run: curl -fsS --retry 5 --retry-delay 2 https://upior.club/ > /dev/null
